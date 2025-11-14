@@ -156,7 +156,7 @@ func New(config Config) (*Client, error) {
 
 	// Initial logs go to stdout only (logs not initialized yet)
 	log.Printf("✅ Introspection client v%s initialized (entity: %s)", Version, entityID)
-	log.Printf("   📦 Auto-registered: service-info, recent-logs, connectivity, certificates")
+	log.Printf("   📦 Auto-registered: service-info (static), recent-logs (59s), connectivity (59s), certificates (trigger)")
 
 	return client, nil
 }
@@ -185,7 +185,7 @@ func (c *Client) registerStandardComponents() error {
 		return err
 	}
 
-	// 4. certificates (Medium = 23s)
+	// 4. certificates (OnlyTrigger - scan on demand when certs change)
 	if err := c.registry.Register("certificates", func() interface{} {
 		// Scan filesystem on every collection
 		if err := c.certMonitor.Scan(); err != nil {
@@ -194,7 +194,7 @@ func (c *Client) registerStandardComponents() error {
 			})
 		}
 		return c.certMonitor.GetData()
-	}, update.Medium); err != nil {
+	}); err != nil { // No update interval - OnlyTrigger
 		return err
 	}
 
