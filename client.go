@@ -31,7 +31,7 @@ import (
 )
 
 // Version is the library version (semantic versioning).
-const Version = "2.6.3"
+const Version = "2.6.4"
 
 // HeartbeatIntervalSec is the fixed heartbeat interval for ALL services (ADR-032).
 const HeartbeatIntervalSec = 59
