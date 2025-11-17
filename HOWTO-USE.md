@@ -1,12 +1,14 @@
-# Using introspection-client v2.6.3 in New Services
+# Using Go Introspection Client Library in New Services
 
-This guide shows you how to integrate `introspection-client v2.6.3` into a service that **doesn't use the library yet**.
+This guide shows you how to integrate the Go introspection client library into a service that **doesn't use the library yet**.
+
+**Current Version:** v2.6.4
 
 ---
 
 ## TL;DR - Quick Integration Checklist
 
-- [ ] Add library to `go.mod`: `github.com/st-keller/introspection-client/v2 v2.6.3`
+- [ ] Add library to `go.mod`: `github.com/st-keller/introspection-client/v2 v2.6.4`
 - [ ] Create `logging.go` with global instances
 - [ ] Create `introspection.go` with manager setup
 - [ ] Update `main.go` to initialize introspection
@@ -19,7 +21,7 @@ This guide shows you how to integrate `introspection-client v2.6.3` into a servi
 
 ## Why Use the Library?
 
-**v2.6.3 gives you:**
+**The library gives you:**
 - ✅ **Automatic introspection** - Service appears in viewer with metadata
 - ✅ **Ghost detection** - Automatic alive/ghost status for services and components
 - ✅ **Structured logging** - All logs tracked in `recent-logs` component
@@ -35,14 +37,14 @@ Update `go.mod`:
 
 ```go
 require (
-    github.com/st-keller/introspection-client/v2 v2.6.3
+    github.com/st-keller/introspection-client/v2 v2.6.4
     // ... other dependencies
 )
 ```
 
 Run:
 ```bash
-go get github.com/st-keller/introspection-client/v2@v2.6.3
+go get github.com/st-keller/introspection-client/v2@v2.6.4
 go mod tidy
 ```
 
@@ -176,7 +178,7 @@ func NewIntrospectionManager(config *Config, startTime time.Time) (*Introspectio
 
 	globalRecentLogs.Info("Service starting", map[string]interface{}{
 		"version": version,
-		"library": "introspection-client v2.6.3",
+		"library": "introspection-client v2.6.4",
 	})
 
 	// Register custom components (service-specific!)
@@ -610,19 +612,19 @@ RUN go mod download  # Works without git if go.sum has checksums!
 See these services for complete implementations:
 
 **deployment-agent** (`services/deployment-agent/`)
-- Complete v2.6.3 implementation
+- Complete library implementation
 - HTTP call tracking (image-store)
 - Structured logging throughout
 - Custom components (docker-info, api-doc)
 
 **app-manager** (`services/app-manager/`)
-- Complete v2.6.3 implementation
+- Complete library implementation
 - HTTP call tracking (deployment-agent)
 - Helper logging functions
 - Custom components (app-info)
 
 **auth-gateway** (`services/auth-gateway/`)
-- Complete v2.6.3 implementation
+- Complete library implementation
 - HTTP call tracking (Kratos)
 - Session validation logging
 
@@ -635,7 +637,7 @@ See these services for complete implementations:
 ## Summary
 
 **Integration in 5 steps:**
-1. Add library dependency (`go get v2.6.3`)
+1. Add library dependency (`go get v2.6.4`)
 2. Create `logging.go` (global instances)
 3. Create `introspection.go` (manager setup)
 4. Update `main.go` (initialize)
