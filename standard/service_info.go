@@ -22,6 +22,7 @@ const (
 // ServiceInfo holds service runtime information.
 // Complete spec: name, version, pid, port, start_time (UTC timestamp),
 // type, implementation_language, binary_path, working_directory, user, uid, gid
+// ADR-036: instance_id for identity validation (Wege und Schlagbäume)
 type ServiceInfo struct {
 	ServiceName              string
 	Version                  string
@@ -34,6 +35,14 @@ type ServiceInfo struct {
 	User                     string
 	UID                      int
 	GID                      int
+	// ADR-036: Unique instance identity for service-authz
+	// Format: {service}-{environment}-{uuid} (e.g., "app-manager-staging-abc123")
+	// Read from SERVICE_INSTANCE_ID environment variable
+	InstanceID               string
+	// ADR-036: Service type for policy lookup (generic, e.g., "app-manager")
+	// Read from SERVICE_TYPE environment variable
+	// Used by service-authz for policy evaluation (same for all instances of a service)
+	PlatformServiceType      string
 }
 
 // AutoDetect creates ServiceInfo with auto-detected runtime information.
@@ -71,6 +80,10 @@ func AutoDetect(serviceName, version string, port int) *ServiceInfo {
 		}
 	}
 
+	// ADR-036: Read instance_id and service_type from environment (set by deployment system)
+	instanceID := os.Getenv("SERVICE_INSTANCE_ID")
+	platformServiceType := os.Getenv("SERVICE_TYPE")
+
 	return &ServiceInfo{
 		ServiceName:            serviceName,
 		Version:                version,
@@ -83,6 +96,8 @@ func AutoDetect(serviceName, version string, port int) *ServiceInfo {
 		User:                   userName,
 		UID:                    uid,
 		GID:                    gid,
+		InstanceID:             instanceID,
+		PlatformServiceType:    platformServiceType,
 	}
 }
 
@@ -105,6 +120,8 @@ func (s *ServiceInfo) GetData() interface{} {
 		"user":                    s.User,
 		"uid":                     s.UID,
 		"gid":                     s.GID,
+		"instance_id":             s.InstanceID,            // ADR-036: Unique instance identity
+		"service_type":            s.PlatformServiceType,  // ADR-036: Service type for policy lookup
 	}
 
 	return data
