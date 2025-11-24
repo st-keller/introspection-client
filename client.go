@@ -152,7 +152,7 @@ func New(config Config) (*Client, error) {
 	}
 
 	// Initial logs go to stdout only (logs not initialized yet)
-	log.Printf("✅ Introspection client initialized (entity: %s, service: %s v%s)", entityID, c.config.ServiceName, c.config.Version)
+	log.Printf("✅ Introspection client initialized (entity: %s, service: %s v%s)", entityID, client.config.ServiceName, client.config.Version)
 	log.Printf("   📦 Auto-registered: service-info (static), recent-logs (59s), connectivity (59s), certificates (trigger)")
 
 	return client, nil
