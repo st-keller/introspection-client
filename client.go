@@ -30,9 +30,6 @@ import (
 	"github.com/st-keller/introspection-client/v2/update"
 )
 
-// Version is the library version (semantic versioning).
-const Version = "2.6.4"
-
 // HeartbeatIntervalSec is the fixed heartbeat interval for ALL services (ADR-032).
 const HeartbeatIntervalSec = 59
 
@@ -155,7 +152,7 @@ func New(config Config) (*Client, error) {
 	}
 
 	// Initial logs go to stdout only (logs not initialized yet)
-	log.Printf("✅ Introspection client v%s initialized (entity: %s)", Version, entityID)
+	log.Printf("✅ Introspection client initialized (entity: %s, service: %s v%s)", entityID, c.config.ServiceName, c.config.Version)
 	log.Printf("   📦 Auto-registered: service-info (static), recent-logs (59s), connectivity (59s), certificates (trigger)")
 
 	return client, nil
